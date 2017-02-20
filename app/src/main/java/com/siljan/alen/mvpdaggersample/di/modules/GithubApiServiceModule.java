@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.siljan.alen.mvpdaggersample.BuildConfig;
 import com.siljan.alen.mvpdaggersample.di.scopes.GithubAppScope;
+import com.siljan.alen.mvpdaggersample.networking.ApiManager;
 import com.siljan.alen.mvpdaggersample.networking.GithubApiService;
 
 import dagger.Module;
@@ -41,5 +42,11 @@ public class GithubApiServiceModule {
     @GithubAppScope
     public GithubApiService provideApiService(Retrofit githubRetrofit) {
         return githubRetrofit.create(GithubApiService.class);
+    }
+
+    @Provides
+    @GithubAppScope
+    ApiManager provideApiManager(GithubApiService apiService) {
+        return new ApiManager(apiService);
     }
 }
