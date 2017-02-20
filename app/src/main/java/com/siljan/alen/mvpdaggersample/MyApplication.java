@@ -2,19 +2,9 @@ package com.siljan.alen.mvpdaggersample;
 
 import android.app.Application;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.jakewharton.picasso.OkHttp3Downloader;
 import com.siljan.alen.mvpdaggersample.di.components.DaggerGithubAppComponent;
 import com.siljan.alen.mvpdaggersample.di.components.GithubAppComponent;
 import com.siljan.alen.mvpdaggersample.di.modules.AppModule;
-import com.siljan.alen.mvpdaggersample.networking.GithubApiService;
-import com.squareup.picasso.Picasso;
-
-import okhttp3.OkHttpClient;
-import okhttp3.logging.HttpLoggingInterceptor;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
  * Created by Alen Siljan on 20.2.2017..
