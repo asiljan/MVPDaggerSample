@@ -2,6 +2,7 @@ package com.siljan.alen.mvpdaggersample.di.components;
 
 import com.siljan.alen.mvpdaggersample.di.modules.GithubApiServiceModule;
 import com.siljan.alen.mvpdaggersample.di.modules.PicassoModule;
+import com.siljan.alen.mvpdaggersample.di.modules.RepoListModule;
 import com.siljan.alen.mvpdaggersample.di.scopes.GithubAppScope;
 import com.siljan.alen.mvpdaggersample.networking.GithubApiService;
 import com.squareup.picasso.Picasso;
@@ -19,4 +20,6 @@ public interface GithubAppComponent {
     Picasso picasso();
 
     GithubApiService githubService();
+
+    RepoListComponent newRepoListComponent(RepoListModule repoListModule);
 }
