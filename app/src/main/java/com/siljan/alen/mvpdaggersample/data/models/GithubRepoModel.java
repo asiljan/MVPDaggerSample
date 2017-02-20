@@ -24,6 +24,9 @@ public class GithubRepoModel {
     @SerializedName("private")
     @Expose
     private boolean mIsPrivateRepo;
+    @SerializedName("description")
+    @Expose
+    private String mRepoDescr;
 
     public long getID() {
         return mID;
@@ -63,5 +66,13 @@ public class GithubRepoModel {
 
     public void setIsPrivateRepo(boolean mIsPrivateRepo) {
         this.mIsPrivateRepo = mIsPrivateRepo;
+    }
+
+    public String getRepoDescr() {
+        return mRepoDescr;
+    }
+
+    public void setRepoDescr(String mRepoDescr) {
+        this.mRepoDescr = mRepoDescr;
     }
 }
