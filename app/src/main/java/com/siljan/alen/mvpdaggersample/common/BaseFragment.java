@@ -4,10 +4,13 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.View;
+import android.widget.RelativeLayout;
 
 import com.siljan.alen.mvpdaggersample.MyApplication;
+import com.siljan.alen.mvpdaggersample.R;
 import com.siljan.alen.mvpdaggersample.di.components.GithubAppComponent;
 
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
@@ -17,6 +20,10 @@ import butterknife.Unbinder;
  */
 
 public abstract class BaseFragment extends Fragment {
+
+    @Nullable
+    @BindView(R.id.loadingBarHolder)
+    RelativeLayout mLoadingLayout;
 
     protected View mView;
     protected Unbinder mUbinder;
@@ -29,17 +36,21 @@ public abstract class BaseFragment extends Fragment {
     }
 
     protected void bindViews() {
-        ButterKnife.bind(this, mView);
+        mUbinder = ButterKnife.bind(this, mView);
     }
 
     protected abstract void injectDependencies(GithubAppComponent appComponent);
 
     protected void showLoadingLayout() {
-
+        if (mLoadingLayout != null) {
+            mLoadingLayout.setVisibility(View.VISIBLE);
+        }
     }
 
     protected void hideLoadingLayout() {
-
+        if (mLoadingLayout != null) {
+            mLoadingLayout.setVisibility(View.GONE);
+        }
     }
 
     @Override
