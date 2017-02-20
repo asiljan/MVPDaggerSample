@@ -30,6 +30,8 @@ import butterknife.BindView;
 
 public class ReposListFragment extends BaseFragment implements RepoListView {
 
+    public static final String TAG = "repo_list_fragment";
+
     @BindView(R.id.recyclerView)
     RecyclerView mRepoList;
 
