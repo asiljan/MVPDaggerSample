@@ -33,7 +33,7 @@ public class RepoListViewHolder extends RecyclerView.ViewHolder {
     }
 
     public void bindData(GithubRepoModel repoModel, Picasso picasso) {
-        mRepoName.setText(String.format("%s", repoModel.getFullName()));
+        mRepoName.setText(String.format("%s", repoModel.getName()));
         mRepoDescr.setText(String.format("%s", repoModel.getRepoDescr()));
 
         picasso
