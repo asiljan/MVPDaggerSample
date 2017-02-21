@@ -21,7 +21,7 @@ public class AppModule {
     private final Context mContext;
 
     public AppModule(Context context) {
-        this.mContext = context;
+        this.mContext = context.getApplicationContext();
     }
 
     @Provides
