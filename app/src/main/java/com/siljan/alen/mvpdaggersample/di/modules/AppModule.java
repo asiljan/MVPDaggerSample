@@ -14,15 +14,15 @@ import dagger.Provides;
  */
 @Module
 public class AppModule {
-    private final MyApplication application;
+    private final Context mContext;
 
-    public AppModule(MyApplication application) {
-        this.application = application;
+    public AppModule(Context context) {
+        this.mContext = context;
     }
 
     @Provides
     @GithubAppScope
     public Context provideContext() {
-        return application.getApplicationContext();
+        return mContext;
     }
 }
