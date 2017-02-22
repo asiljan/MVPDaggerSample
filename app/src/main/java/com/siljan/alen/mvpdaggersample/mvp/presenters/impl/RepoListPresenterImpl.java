@@ -5,31 +5,52 @@ import com.siljan.alen.mvpdaggersample.mvp.interactors.IRepoListInteractor;
 import com.siljan.alen.mvpdaggersample.mvp.listeners.RepoListListener;
 import com.siljan.alen.mvpdaggersample.mvp.presenters.IRepoListPresenter;
 import com.siljan.alen.mvpdaggersample.mvp.views.RepoListView;
+import com.siljan.alen.mvpdaggersample.networking.ApiManager;
+import com.siljan.alen.mvpdaggersample.networking.callbacks.GithubRepositoriesCallback;
 
 import java.util.List;
 
 import javax.inject.Inject;
+
+import rx.Subscription;
+import rx.subscriptions.CompositeSubscription;
 
 /**
  * Created by Alen Siljan on 20.2.2017..
  * alen.siljan@gmail.com
  */
 
-public class RepoListPresenterImpl implements IRepoListPresenter, RepoListListener {
+public class RepoListPresenterImpl implements IRepoListPresenter {
 
     RepoListView mRepoView;
-    IRepoListInteractor mInteractor;
+    ApiManager mApiManager;
+
+    private Subscription mSubscription;
 
     @Inject
-    public RepoListPresenterImpl(RepoListView repoListView, IRepoListInteractor interactor) {
+    public RepoListPresenterImpl(RepoListView repoListView, ApiManager apiManager) {
         this.mRepoView = repoListView;
-        this.mInteractor = interactor;
+        this.mApiManager = apiManager;
+        this.mSubscription = new CompositeSubscription();
     }
 
     @Override
     public void onStart() {
         mRepoView.onShowLoadingLayout();
-        mInteractor.fetchGithubRepos(this);
+
+        mSubscription = mApiManager.fetchGithubRepositories(new GithubRepositoriesCallback() {
+            @Override
+            public void onSuccess(List<GithubRepoModel> repositories) {
+                mRepoView.onHideLoadingLayout();
+                mRepoView.onRepositoriesFetched(repositories);
+            }
+
+            @Override
+            public void onError(String msg) {
+                mRepoView.onHideLoadingLayout();
+                mRepoView.onError(msg);
+            }
+        });
     }
 
     @Override
@@ -39,19 +60,8 @@ public class RepoListPresenterImpl implements IRepoListPresenter, RepoListListen
 
     @Override
     public void onDestroy() {
-
-    }
-
-    //callback methods
-    @Override
-    public void onSuccess(List<GithubRepoModel> repositories) {
-        mRepoView.onHideLoadingLayout();
-        mRepoView.onRepositoriesFetched(repositories);
-    }
-
-    @Override
-    public void onError(String msg) {
-        mRepoView.onHideLoadingLayout();
-        mRepoView.onError(msg);
+        if (mSubscription != null && !mSubscription.isUnsubscribed()) {
+            mSubscription.unsubscribe();
+        }
     }
 }

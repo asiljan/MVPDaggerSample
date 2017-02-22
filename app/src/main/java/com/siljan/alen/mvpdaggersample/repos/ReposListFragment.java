@@ -56,6 +56,14 @@ public class ReposListFragment extends BaseFragment implements RepoListView {
         mPresenter.onStart();
     }
 
+    @Override
+    public void onDestroy() {
+        if (mPresenter != null) {
+            mPresenter.onDestroy();
+        }
+        super.onDestroy();
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {

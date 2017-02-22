@@ -6,6 +6,7 @@ import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
+import rx.Observable;
 
 /**
  * Created by Alen Siljan on 20.2.2017..
@@ -15,6 +16,7 @@ import retrofit2.http.GET;
 public interface GithubApiService {
     String REPOS_ENDPOINT = "repositories";
 
+
     @GET(REPOS_ENDPOINT)
-    Call<List<GithubRepoModel>> getAllRepos();
+    Observable<List<GithubRepoModel>> getAllGithubRepos();
 }
