@@ -18,5 +18,5 @@ public interface GithubApiService {
 
 
     @GET(REPOS_ENDPOINT)
-    Observable<List<GithubRepoModel>> getAllGithubRepos();
+    rx.Observable<List<GithubRepoModel>> getAllGithubRepos();
 }

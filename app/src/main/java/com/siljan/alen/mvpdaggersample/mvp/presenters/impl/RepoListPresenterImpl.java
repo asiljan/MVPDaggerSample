@@ -2,16 +2,14 @@ package com.siljan.alen.mvpdaggersample.mvp.presenters.impl;
 
 import com.siljan.alen.mvpdaggersample.data.models.GithubRepoModel;
 import com.siljan.alen.mvpdaggersample.mvp.interactors.IRepoListInteractor;
-import com.siljan.alen.mvpdaggersample.mvp.listeners.RepoListListener;
 import com.siljan.alen.mvpdaggersample.mvp.presenters.IRepoListPresenter;
 import com.siljan.alen.mvpdaggersample.mvp.views.RepoListView;
-import com.siljan.alen.mvpdaggersample.networking.ApiManager;
-import com.siljan.alen.mvpdaggersample.networking.callbacks.GithubRepositoriesCallback;
 
 import java.util.List;
 
 import javax.inject.Inject;
 
+import rx.Observer;
 import rx.Subscription;
 import rx.subscriptions.CompositeSubscription;
 
@@ -23,14 +21,14 @@ import rx.subscriptions.CompositeSubscription;
 public class RepoListPresenterImpl implements IRepoListPresenter {
 
     RepoListView mRepoView;
-    ApiManager mApiManager;
+    IRepoListInteractor mInteractor;
 
     private Subscription mSubscription;
 
     @Inject
-    public RepoListPresenterImpl(RepoListView repoListView, ApiManager apiManager) {
+    public RepoListPresenterImpl(RepoListView repoListView, IRepoListInteractor interactor) {
         this.mRepoView = repoListView;
-        this.mApiManager = apiManager;
+        this.mInteractor = interactor;
         this.mSubscription = new CompositeSubscription();
     }
 
@@ -38,19 +36,25 @@ public class RepoListPresenterImpl implements IRepoListPresenter {
     public void onStart() {
         mRepoView.onShowLoadingLayout();
 
-        mSubscription = mApiManager.fetchGithubRepositories(new GithubRepositoriesCallback() {
-            @Override
-            public void onSuccess(List<GithubRepoModel> repositories) {
-                mRepoView.onHideLoadingLayout();
-                mRepoView.onRepositoriesFetched(repositories);
-            }
+        mSubscription = mInteractor.getGithubRepos()
+                .subscribe(new Observer<List<GithubRepoModel>>() {
+                    @Override
+                    public void onCompleted() {
 
-            @Override
-            public void onError(String msg) {
-                mRepoView.onHideLoadingLayout();
-                mRepoView.onError(msg);
-            }
-        });
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        mRepoView.onHideLoadingLayout();
+                        mRepoView.onError(e.getLocalizedMessage());
+                    }
+
+                    @Override
+                    public void onNext(List<GithubRepoModel> githubRepoModels) {
+                        mRepoView.onHideLoadingLayout();
+                        mRepoView.onRepositoriesFetched(githubRepoModels);
+                    }
+                });
     }
 
     @Override
