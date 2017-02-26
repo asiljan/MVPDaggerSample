@@ -3,6 +3,7 @@ package com.siljan.alen.mvpdaggersample.di.modules;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.siljan.alen.mvpdaggersample.BuildConfig;
+import com.siljan.alen.mvpdaggersample.common.IRxJavaSchedulers;
 import com.siljan.alen.mvpdaggersample.di.scopes.GithubAppScope;
 import com.siljan.alen.mvpdaggersample.networking.ApiManager;
 import com.siljan.alen.mvpdaggersample.networking.GithubApiService;
@@ -18,7 +19,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
  * Created by Alen Siljan on 20.2.2017..
  * alen.siljan@gmail.com
  */
-@Module(includes = NetworkModule.class)
+@Module(includes = {NetworkModule.class, RxJavaSchedulerModule.class})
 public class GithubApiServiceModule {
 
     @Provides
@@ -48,7 +49,7 @@ public class GithubApiServiceModule {
 
     @Provides
     @GithubAppScope
-    ApiManager provideApiManager(GithubApiService apiService) {
-        return new ApiManager(apiService);
+    ApiManager provideApiManager(GithubApiService apiService, IRxJavaSchedulers schedulers) {
+        return new ApiManager(apiService, schedulers);
     }
 }
